@@ -44,7 +44,7 @@ def epitope(final_proteins, working_dir,
         for p, score in zip(final_proteins, protein_scores):
             if score >= percentile:
                 # create a dir for every protein
-                prot_name = p.accession if p.accession != None else p.id
+                prot_name = epitope_output_identifier(p)
                 new_dir_path = os.path.join(working_dir, 'epitope', prot_name)
                 os.makedirs(new_dir_path, exist_ok=True)
                 # run predictions for MHC I and II epitopes
