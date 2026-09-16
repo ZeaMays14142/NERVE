@@ -6,6 +6,7 @@ from Bio.Blast.Applications import NcbiblastpCommandline
 from Bio.Blast import NCBIXML 
 import pandas as pd
 from code import Protein
+from code.Utils import build_id_index, match_protein
 import shutil
 
 def autoimmunity(list_of_proteins, proteome1, working_dir, NERVE_dir, e_value, minlength, mismatch, substitution)->list:
@@ -22,12 +23,12 @@ def autoimmunity(list_of_proteins, proteome1, working_dir, NERVE_dir, e_value, m
     #logging.debug("Warning: you can find a sapiens.xml file on your working directory which is the outputs of the autoimmunity module.\nDo not delete during the computation!\nAfter the computation it will be deleted in order to avoid future collisions.")
     # for each result in the .xml file...
     #outfile = open(os.path.join(working_dir, 'autoimmunity_raw_output.txt'), 'w')
+    protein_index = build_id_index(list_of_proteins)
     for record in NCBIXML.parse(open(os.path.join(working_dir,"sapiens.xml"))):
         query_name = record.query.split(' ')[0] # take only the query name 
-        # take the right candidate to update
-        for p in list_of_proteins:
-            if query_name in p.id: # do not use query_name == p.id
-                tmp_protein = p
+        tmp_protein = match_protein(query_name, protein_index, list_of_proteins)
+        if tmp_protein is None:
+            continue
         # for each effective alignment between the tmp candidate and the human proteome
         for alignment in record.alignments:
             for hsp in alignment.hsps: # collect all the interesting peptides
@@ -85,13 +86,12 @@ def mouse(list_of_proteins, working_dir, NERVE_dir, e_value, proteome1, minlengt
     blastx_cline = NcbiblastpCommandline(query=proteome1, db=os.path.join(NERVE_dir,"database/mouse_database/mouse"), evalue=e_value, outfmt=5, out=os.path.join(working_dir, "mouse.xml"))
     stdout, stderr = blastx_cline()
     #outfile = open(os.path.join(working_dir, 'mouse_immunity_raw_output.txt'), 'w')
+    protein_index = build_id_index(list_of_proteins)
     for record in NCBIXML.parse(open(os.path.join(working_dir, "mouse.xml"))):
         query_name = record.query.split(' ')[0]
-        tmp_protein = list_of_proteins[0]
-        # take the right protein
-        for p in list_of_proteins:
-            if query_name in p.id: # do not use query_name == p.id
-                tmp_protein = p
+        tmp_protein = match_protein(query_name, protein_index, list_of_proteins)
+        if tmp_protein is None:
+            continue
         for alignment in record.alignments:
             for hsp in alignment.hsps:
                 tmp_protein.list_of_shared_mouse_peps += Protein.Protein.hsp_match_parser(hsp.match, hsp.query, parsing_window_size=minlength, max_sub=substitution, max_mismatch=mismatch )
@@ -145,13 +145,12 @@ def conservation(list_of_proteins, working_dir, NERVE_dir, e_value, proteome1, p
     stdout, stderr = blastx_cline()
     
     outfile=open(os.path.join(working_dir, 'conservation_raw_output.txt'), 'w')
+    protein_index = build_id_index(list_of_proteins)
     for record in NCBIXML.parse(open(os.path.join(working_dir,"comparison.xml"))):
         query_name = record.query.split(' ')[0] 
-    
-        for p in list_of_proteins:
-            if query_name in p.id: # do not use p.id == query_name
-                tmp_protein = p
-                #max_score = 0
+        tmp_protein = match_protein(query_name, protein_index, list_of_proteins)
+        if tmp_protein is None:
+            continue
         for alignment in record.alignments:
             for hsp in alignment.hsps:
                 #if hsp.score > max_score: max_score = hsp.score

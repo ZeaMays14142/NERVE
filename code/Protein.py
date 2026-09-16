@@ -2,13 +2,15 @@
 """Class and methods to store entry information"""
 
 import numpy as np
+from code.Utils import derive_accession
 
 class Protein:
 		
 	def __init__(self, identifier, sequence_string):
 		self.id = identifier
 		self.score = None        
-		self.accession = identifier.split('|')[1] if identifier.count("|") == 2 else None
+		self.accession = derive_accession(identifier)
+		self.original_id = identifier
 		self.sequence = sequence_string # the sequence used for the analyses
 		self.original_sequence_if_razor = None # put the original sequence if razor is performed
 		self.sequence_out = None
@@ -157,4 +159,4 @@ class Protein:
 	def extendRight(peptide, start_pep, real_query, start_q, len_query):
 		while (peptide[start_pep:start_pep+len_query] == real_query[start_q:start_q+len_query]) and (start_pep+len_query<len(peptide)) and (peptide[start_pep:start_pep+len_query+1] == real_query[start_q:start_q+len_query+1]):
 			len_query += 1
-		return len_query	
+		return len_query

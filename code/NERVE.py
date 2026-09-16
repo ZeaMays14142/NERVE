@@ -355,7 +355,10 @@ def main():
     for p in list_of_fasta_proteins:
         p_id = str(p.description)
         p_seq = str(p.seq)
-        list_of_proteins.append(Protein(p_id, p_seq))
+        protein = Protein(p_id, p_seq)
+        protein.original_id = getattr(p, 'original_description', p_id)
+        protein.accession = getattr(p, 'accession', protein.accession)
+        list_of_proteins.append(protein)
     end=time.time()
     logging.debug(f'{len(list_of_fasta_proteins)} proteins loaded in {end-start} seconds')
     

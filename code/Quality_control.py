@@ -4,7 +4,7 @@
 import os, logging, requests
 from Bio import SeqIO
 from Bio.Seq import Seq
-from code.Utils import dir_path
+from code.Utils import dir_path, normalize_header
 
 class protein_element:
     """Class to handle fasta file elements similarly to the biopython fasta file parser"""
@@ -96,6 +96,7 @@ def quality_control(path_to_fasta:str, working_dir:str, upload=False) -> dir_pat
               'G': 'G', 'H': 'H', 'L': 'L', 'R': 'R', 'W': 'W', 'A': 'A', 'V': 'V', 'E': 'E', 'Y': 'Y', 'M': 'M', 
               'U':'C'}
     filtered_sequences, discarded_sequences = [],[]
+    seen_accessions = set()
     # control formatting
     fasta_list = is_fasta(path_to_fasta)    
     # filename needed to create the output file
@@ -116,13 +117,9 @@ def quality_control(path_to_fasta:str, working_dir:str, upload=False) -> dir_pat
                 new_seq+=aa_dic[aa]
             else:
                 new_seq+=aa_dic[aa]
-        # check name
-        if ">" in record.description:
-            logging.debug(f'Found non-allowed character ">" in sequence name:\n{record.description}\nSubstituting with "_"')
-            record.description = record.description.replace(">","_")
-        if "/" in record.description:
-            logging.debug(f'Found non-allowed character "/" in sequence name:\n{record.description}\nSubstituting with "_"')
-            record.description = record.description.replace("/","_")
+        # standardize identifier and retain original name
+        record.original_description = record.description
+        record.description, record.accession = normalize_header(record.description, seen_accessions)
         record.seq = Seq(new_seq)
         
         if flag == True:
