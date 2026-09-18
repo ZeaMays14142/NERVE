@@ -11,7 +11,7 @@ from subprocess import getstatusoutput
 
 # global test variables
 
-NERVE_VERSION="v0.0.8"
+NERVE_VERSION="v0.0.9"
 RUN = f"docker run --network nerve-network -p 8880:8880 -i -v $(pwd):/workdir nerve:{NERVE_VERSION}"
 
 WORKDIR = "./tests/output_data/"
