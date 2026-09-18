@@ -7,6 +7,8 @@ NERVE_VERSION="v0.0.9"
 NERVE_DIR="$(cd "$(dirname "$0")" && pwd)"
 NERVE_COMMIT="$(git -C "$NERVE_DIR" rev-parse HEAD 2>/dev/null || printf unknown)"
 
+"$NERVE_DIR/docker/verify_base.sh" --restore
+
 # create network
 [ ! "$(docker network ls | grep nerve-network)" ] && docker network create nerve-network --attachable
 

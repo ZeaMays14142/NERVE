@@ -1,3 +1,4 @@
+# Historical: unrebuildable; the image is pinned in base-image.lock.
 FROM ubuntu:16.04 AS psortb
 LABEL old_maintainer="Gemma Hoad <ghoad@sfu.ca>"
 LABEL new_maintainer="Francesco Costa <fcosta@ebi.ac.uk>"

@@ -1,3 +1,4 @@
+# Historical: clones FranceCosta/NERVE (frozen 2023-12-17) unpinned. Do not rebuild.
 FROM python:3.8 AS base
 
 LABEL maintainer="Francesco Costa <fcosta@ebi.ac.uk>"
