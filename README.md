@@ -76,6 +76,8 @@ cd NERVE
 ./NERVE.sh --help
 ```
 
+The base images are pinned by digest in `base-image.lock`; `docker/verify_base.sh` checks them before each build.
+
 This is the expected output:
 ```
 usage: NERVE.py [-h] [-a] [-ev] -g [-ml] [-mm] [-m] [-mpsl] -p1 [-p2] [-pl] [-rz] [-rl] [-s] [-ss] [-tdl] [-vl] [-vir]

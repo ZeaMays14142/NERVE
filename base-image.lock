@@ -1,0 +1,36 @@
+# Frozen, unrebuildable bases (they carry data, not just deps). Checked by docker/verify_base.sh.
+
+base_image        francecosta/nerve:v0.0.7
+base_digest       sha256:f49feae627370f12bde8a4ec12a117b53e5840caf10a21531e7fc1e9c46fd9f9
+base_config       sha256:6645257f9465fbe1c4ce5882ec99a96e82e5ae3579b6d4183868eafc5be38a43
+base_created      2024-11-17T14:50:47Z
+base_code_commit  cbd9314          # the baked code/ tree, byte-identical to this commit
+base_layers       34
+
+# psortb: unrebuildable (Ubuntu 16.04, unpinned HTTP downloads).
+psortb_image      francecosta/psortb_http_api:v0.0.1
+psortb_digest     sha256:68357a19efee3aa837f94e3af84c19ad8e77bf19b86d64a9a22282a5447d6ea8
+psortb_config     sha256:292d7d41ec6d947cbc7c4cbbc3e2db9d5309cf42f18446a0ca4a7f7b6e9b9c46
+
+# Local archives, in $NERVE_BASE_ARCHIVE_DIR (default ~/.cache/nerve-base).
+base_archive_file    francecosta-nerve-v0.0.7.tar
+base_archive_sha256  4f106b87ab763ca727ca4e9a9e4f34366272831fcf6fd53760feabe8b582e523
+psortb_archive_file  francecosta-psortb-v0.0.1.tar
+psortb_archive_sha256  1757d21235927b69e42a04cb983a7be98c2ff918727d4aabfc5083eb94fa8765
+
+# Previous base, for bisecting; optional.
+prev_image        francecosta/nerve:v0.0.6
+prev_digest       sha256:5a4528e8d1bbeb05d3c2c26591030906df0b05d74f524efbc1d41a80f45fd5df
+prev_config       sha256:11bd538a4c8010e88a96769b0d1c372171a9f3cd741f4570f9d399a4e43ecc81
+prev_created      2024-02-18T19:26:35Z
+prev_code_commit  85b868c
+prev_archive_file    francecosta-nerve-v0.0.6.tar
+prev_archive_sha256  fef6d3027faa7b82f54ab91649c50433ef9e61ee58cff812ffbbfab78c18a62b
+
+# Published image downstream consumers pin; optional here.
+published_image        ghcr.io/nerve-bio/nerve:3460ae5
+published_digest       sha256:2882dd0a189b7e9e0f164778fa47541e2deea2375200ab05a7257b5bb61b67a9
+published_config       sha256:7d1d2a945ed00493cec8dcb5da560f19de7c4c2c47698fa6a14b9e08b8033f60
+published_code_commit  3460ae5
+published_archive_file    nerve-bio-3460ae5.tar
+published_archive_sha256  43777045c35d711603c405b3fc0bc0256d0a36adf0bd11d6f4855b9faf9a4666
